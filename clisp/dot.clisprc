@@ -1,0 +1,54 @@
+; -*- mode: Lisp -*-
+
+(defvar *clisp-packages-directory*
+  (merge-pathnames "lisp/clisp/" (user-homedir-pathname)))
+
+(load (merge-pathnames "systems/asdf.lisp" *clisp-packages-directory*))
+
+(require :asdf)
+
+(push (merge-pathnames "systems/" *clisp-packages-directory*)
+      asdf:*central-registry*)
+
+(asdf:operate 'asdf:compile-op :asdf-install)
+(asdf:operate 'asdf:load-op :asdf-install)
+
+(push (list (merge-pathnames "site/" *clisp-packages-directory*)
+            (merge-pathnames "systems/" *clisp-packages-directory*)
+            "Local Installs")
+      asdf-install:*locations*)
+
+;; (defmacro load-or-install (package)
+;;   `(handler-case
+;;        (progn
+;;          (asdf:operate 'asdf:load-op ,package))
+;;      (asdf:missing-component ()
+;;        (asdf-install:install ,package))))
+
+
+;; (load-or-install :cl-ppcre)
+;; (load-or-install :md5)
+;; (load-or-install :trivial-gray-streams)
+;; (load-or-install :flexi-streams)
+;; (load-or-install :url-rewrite)
+;; (load-or-install :rfc2388)
+;; (load-or-install :cl-base64)
+;; (load-or-install :chunga)
+;; (push  :hunchentoot-no-ssl *features*)
+;; (load-or-install :hunchentoot)
+;; (load-or-install :cl-who)
+
+;(load (merge-pathnames
+;       "lisp/slime/swank-loader" (user-homedir-pathname)))
+
+;(dolist (module '("swank-arglists"
+;                  "swank-asdf"
+;                  "swank-c-p-c"
+;                  "swank-fancy-inspector"
+;                  "swank-fuzzy"
+;                  "swank-presentation-streams"
+;                  "swank-presentations"))
+;  (load (merge-pathnames
+;         (merge-pathnames "lisp/slime/contrib/"
+;                          module)
+;         (user-homedir-pathname))))
